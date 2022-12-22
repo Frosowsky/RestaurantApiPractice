@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication3.Entitie;
+using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
@@ -9,22 +12,26 @@ namespace WebApplication3.Controllers
     public class RestaurantControllers : ControllerBase
     {
         private readonly RestaurantDbContext _dbContext;
-        public RestaurantControllers(RestaurantDbContext dbContext)
+        private readonly IMapper _mapper;
+        public RestaurantControllers(RestaurantDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Restaurant>> GetAll()
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
             var resturant = _dbContext
                 .Restaurants
+                .Include(r => r.Adress)
+                .Include(r => r.Dishes)
                 .ToList();
-
-            return Ok(resturant);
+            var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(resturant);
+            return Ok(restaurantsDtos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Restaurant> Get ([FromRoute] int id)
+        public ActionResult<RestaurantDto> Get ([FromRoute] int id)
         {
             var restaurant = _dbContext
                 .Restaurants
@@ -32,7 +39,10 @@ namespace WebApplication3.Controllers
             if(restaurant == null)
             {
                 return NotFound();
-            } else return Ok(restaurant);
+            }
+
+            var restaurantDto = _mapper.Map<Restaurant>(restaurant);
+            return Ok(restaurantDto);
         }
     }
 
