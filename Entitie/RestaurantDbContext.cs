@@ -18,6 +18,16 @@ namespace WebApplication3.Entitie
             modelBuilder.Entity<Dish>()
                .Property(d => d.Name)
                .IsRequired();
+            modelBuilder.Entity<Adress>()
+                .Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(50);
+            modelBuilder.Entity<Adress>()
+                .Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(50);
+            
+                
          
            
         }

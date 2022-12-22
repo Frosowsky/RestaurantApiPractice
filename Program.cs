@@ -1,16 +1,25 @@
 using System.Runtime.CompilerServices;
 using WebApplication3;
+using WebApplication3.Entitie;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddTransient<IWeatherForecastServices, WeatherForecastServices>();
+builder.Services.AddDbContext<RestaurantDbContext>();
+builder.Services.AddScoped<RestaurantSeeder>();
+
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
+
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
+seeder.Seed();
 
 app.UseHttpsRedirection();
 
