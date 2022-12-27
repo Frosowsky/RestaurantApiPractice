@@ -29,7 +29,14 @@ namespace WebApplication3.Controllers
             var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(resturant);
             return Ok(restaurantsDtos);
         }
-
+        [HttpPost]
+        public ActionResult CreateRestaurant([FromBody]CreateRestaurantDto dto)
+        {
+            var restaurant = _mapper.Map<Restaurant>(dto);
+            _dbContext.Restaurants.Add(restaurant);
+            _dbContext.SaveChanges();
+            return Created($"/api/restaurant/{restaurant.Id}", null);
+        }
         [HttpGet("{id}")]
         public ActionResult<RestaurantDto> Get ([FromRoute] int id)
         {

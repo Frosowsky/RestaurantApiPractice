@@ -16,6 +16,14 @@ namespace WebApplication3
                 .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.Adress.PostalCode));
 
             CreateMap<Dish, DishDto>();
+
+            CreateMap<CreateRestaurantDto, Restaurant>()
+                .ForMember(r => r.Adress, c => c.MapFrom(dto => new Adress()
+                {
+                    City = dto.City,
+                    PostalCode = dto.PostalCode,
+                    Street = dto.Street
+                }));
         }
     }
 }
