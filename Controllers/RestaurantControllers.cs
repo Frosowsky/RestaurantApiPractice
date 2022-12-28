@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 using WebApplication3.Entitie;
 using WebApplication3.Models;
 using WebApplication3.Services;
@@ -31,6 +32,21 @@ namespace WebApplication3.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPut("{id}")]
+
+        public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var isUpdated = _restaurantService.Update(id, dto);
+
+            if (!isUpdated) return NotFound();
+            return Ok();
+
         }
         
         [HttpGet]

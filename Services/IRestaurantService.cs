@@ -8,5 +8,6 @@ namespace WebApplication3.Services
         IEnumerable<RestaurantDto> GetAll();
         RestaurantDto GetByIdd(int id);
         bool Delete(int id);
+        bool Update(int id, UpdateRestaurantDto dto);
     }
 }
