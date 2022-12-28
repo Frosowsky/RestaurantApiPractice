@@ -9,10 +9,13 @@ namespace WebApplication3.Services
     {
         private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;
-        public RestaurantService(RestaurantDbContext dbContext, IMapper mapper)
+        private readonly ILogger<RestaurantService> _logger;
+
+        public RestaurantService(RestaurantDbContext dbContext, IMapper mapper, ILogger<RestaurantService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
         public RestaurantDto GetByIdd(int id)
         {
@@ -50,6 +53,7 @@ namespace WebApplication3.Services
 
         public bool Delete(int id)
         {
+            _logger.LogWarning($"Restaurant with id: {id} DELETE action invoked");
             var restaurant = _dbContext
                 .Restaurants
                 .FirstOrDefault(x => x.Id == id);

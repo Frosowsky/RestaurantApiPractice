@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using WebApplication3;
 using WebApplication3.Entitie;
 using WebApplication3.Services;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +14,10 @@ builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Host.UseNLog();
 
 var app = builder.Build();
+
 
 
 
@@ -25,6 +28,7 @@ var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
 seeder.Seed();
 
 app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
 
