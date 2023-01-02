@@ -6,11 +6,16 @@ using WebApplication3.Services;
 using NLog.Web;
 using WebApplication3.Middleware;
 using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using WebApplication3.Models;
+using WebApplication3.Models.Validators;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
@@ -22,7 +27,8 @@ builder.Host.UseNLog();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();  
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 
 
 
