@@ -31,6 +31,11 @@ namespace WebApplication3.Entitie
             modelBuilder.Entity<User>()
                 .Property(u => u.Email)
                 .IsRequired();
+        
+            
+
+
+
             modelBuilder.Entity<Role>()
                 .Property(u => u.Name)
                 .IsRequired();
