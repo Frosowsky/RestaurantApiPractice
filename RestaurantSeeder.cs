@@ -13,6 +13,12 @@ namespace WebApplication3
         {
             if (_dbcontext.Database.CanConnect())
             {
+                if (!_dbcontext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbcontext.Roles.AddRange(roles);
+                    _dbcontext.SaveChanges();   
+                }
                 if (!_dbcontext.Restaurants.Any())
                 {
                     var restaurants = GetRestaurants();
@@ -20,6 +26,27 @@ namespace WebApplication3
                     _dbcontext.SaveChanges();
                 }
             }
+        }
+
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role()
+                {
+                    Name = "User"
+                },
+                new Role()
+                {
+                    Name = "Manager"
+                },
+                new Role()
+                {
+                    Name = "Admin"
+                }
+            };
+            return roles;
+      
         }
      private static IEnumerable<Restaurant> GetRestaurants()
         {
