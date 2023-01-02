@@ -24,27 +24,18 @@ namespace WebApplication3.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-           var isDeleted = _restaurantService.Delete(id);
-
-            if(isDeleted)
-            {
-                return NoContent();
-            }
-
-            return NotFound();
+            _restaurantService.Delete(id);
+      
+        return NoContent();
         }
 
         [HttpPut("{id}")]
 
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var isUpdated = _restaurantService.Update(id, dto);
-
-            if (!isUpdated) return NotFound();
+           
+           _restaurantService.Update(id, dto);
+            
             return Ok();
 
         }
@@ -58,7 +49,7 @@ namespace WebApplication3.Controllers
         [HttpPost]
         public ActionResult CreateRestaurant([FromBody]CreateRestaurantDto dto)
         {
-            if(!ModelState.IsValid) { return BadRequest(ModelState); }
+          
             var id = _restaurantService.Create(dto);
             return Created($"/api/restaurant/{id}", null);
         }
@@ -66,12 +57,7 @@ namespace WebApplication3.Controllers
         public ActionResult<RestaurantDto> Get ([FromRoute] int id)
         {
             var restaurant = _restaurantService.GetByIdd(id);
-            if(restaurant == null)
-            {
-                return NotFound();
-            }
-
-            
+                        
             return Ok(restaurant);
         }
     }
