@@ -24,6 +24,7 @@ namespace WebApplication3
                     PostalCode = dto.PostalCode,
                     Street = dto.Street
                 }));
+            CreateMap<CreateDishDto, Dish>();
         }
     }
 }
