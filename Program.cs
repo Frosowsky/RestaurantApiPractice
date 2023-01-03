@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 var authenticationSettings = new AuthenticationSettings();
+builder.Services.AddSingleton(authenticationSettings);
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 builder.Services.AddAuthentication(option =>
 {
@@ -53,6 +54,7 @@ builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+builder.Services.AddScoped<IValidator<LoginDto>, LoginUserDtoValidator>();
 
 
 

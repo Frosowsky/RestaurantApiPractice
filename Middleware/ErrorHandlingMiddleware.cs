@@ -18,6 +18,11 @@ namespace WebApplication3.Middleware
             {
               await next.Invoke(context);
             }
+            catch(BadRequestException badRequestExceptions)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequestExceptions.Message);
+            }
             catch(NotFoundException notFoundExceptions)
             {
                 context.Response.StatusCode = 404;

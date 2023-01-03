@@ -25,6 +25,7 @@ namespace WebApplication3
                     Street = dto.Street
                 }));
             CreateMap<CreateDishDto, Dish>();
+
         }
     }
 }
