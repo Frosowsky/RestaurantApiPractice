@@ -51,9 +51,11 @@ namespace WebApplication3.Controllers
             return Ok(restaurantDtos);
         }   
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
+        
         public ActionResult CreateRestaurant([FromBody]CreateRestaurantDto dto)
         {
-          
+            
             var id = _restaurantService.Create(dto);
             return Created($"/api/restaurant/{id}", null);
         }
