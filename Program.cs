@@ -35,11 +35,12 @@ builder.Services.AddAuthentication(option =>
     {
         ValidIssuer = authenticationSettings.JwtIssuer,
         ValidAudience = authenticationSettings.JwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtIssuer)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
     };
 
 });
- builder.Services.AddMvc();
+
+builder.Services.AddMvc();
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<RestaurantDbContext>();
@@ -58,9 +59,6 @@ builder.Services.AddScoped<IValidator<LoginDto>, LoginUserDtoValidator>();
 
 
 
-
-
-
 var app = builder.Build();
 
 
@@ -75,6 +73,7 @@ app.UseMiddleware<RequestTimeMiddleware>();
 
 app.UseAuthentication();
 
+
 app.UseHttpsRedirection();
 
 app.UseSwagger();
@@ -83,6 +82,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant Api");
 });
 
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
