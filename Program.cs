@@ -46,10 +46,13 @@ builder.Services.AddAuthorization(option =>
    
     option.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish"));
     option.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
+    option.AddPolicy("Minimum2", builder => builder.AddRequirements(new AddMinimum(2)));
 });
 
 builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, AddMinimumHandler>();
+
 builder.Services.AddMvc();
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddControllers();
@@ -66,6 +69,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<LoginDto>, LoginUserDtoValidator>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpContextAccessor();
 
 
 
