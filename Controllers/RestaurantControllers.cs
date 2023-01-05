@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using WebApplication3.Entitie;
 using WebApplication3.Models;
@@ -26,7 +27,7 @@ namespace WebApplication3.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            _restaurantService.Delete(id);
+            _restaurantService.Delete(id, User);
       
         return NoContent();
         }
@@ -36,14 +37,14 @@ namespace WebApplication3.Controllers
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {
            
-           _restaurantService.Update(id, dto);
+           _restaurantService.Update(id, dto, User);
             
             return Ok();
 
         }
         
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "Atleast20")]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {   
 
@@ -55,8 +56,8 @@ namespace WebApplication3.Controllers
         
         public ActionResult CreateRestaurant([FromBody]CreateRestaurantDto dto)
         {
-            
-            var id = _restaurantService.Create(dto);
+            var userId =int.Parse( User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var id = _restaurantService.Create(dto, userId);
             return Created($"/api/restaurant/{id}", null);
         }
         [HttpGet("{id}")]

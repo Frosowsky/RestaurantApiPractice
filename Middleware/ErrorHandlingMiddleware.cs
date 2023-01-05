@@ -28,7 +28,13 @@ namespace WebApplication3.Middleware
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(notFoundExceptions.Message);
             }
-            catch(Exception ex)
+            catch (ForbidException forbidException)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsync(forbidException.Message);
+            }
+
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 context.Response.StatusCode = 500;

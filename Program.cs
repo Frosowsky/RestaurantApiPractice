@@ -13,6 +13,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using WebApplication3.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +41,15 @@ builder.Services.AddAuthentication(option =>
     };
 
 });
+builder.Services.AddAuthorization(option =>
+{
+   
+    option.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish"));
+    option.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
+});
 
+builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
 builder.Services.AddMvc();
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddControllers();

@@ -68,8 +68,14 @@ namespace WebApplication3.Services
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                 new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
                 new Claim("DateOfBirth", user.DateOfBirth.Value.ToString("yyyy-MM-dd")),
-                new Claim("Nationality", user.Nationality)
+               
             };
+            if (!string.IsNullOrEmpty(user.Nationality))
+            {
+                claims.Add(
+                    new Claim("Nationality", user.Nationality)
+                    );
+            }
 
 
             var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
