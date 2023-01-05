@@ -42,15 +42,26 @@ namespace WebApplication3.Services
             return result;
         }
 
-        public IEnumerable<RestaurantDto> GetAll()
+        public PageResult<RestaurantDto> GetAll(RestaurantQuery query)
         {
-            var resturant = _dbContext
+
+            var baseQuery = _dbContext
               .Restaurants
               .Include(r => r.Adress)
               .Include(r => r.Dishes)
+              .Where(r => query.SearchPharse == null || r.Name.ToLower().Contains(query.SearchPharse.ToLower())
+              || r.Name.ToLower().Contains(query.SearchPharse.ToLower()));
+
+            var resturant = baseQuery
+              .Skip(query.PageSize * (query.PageNumber -1))
+              .Take(query.PageSize)
               .ToList();
+
+            
             var restaurantsDtos = _mapper.Map<List<RestaurantDto>>(resturant);
-            return restaurantsDtos;
+
+            var result = new PageResult<RestaurantDto>(restaurantsDtos, baseQuery.Count(), query.PageSize, query.PageNumber) ;
+            return result;
         }
 
         public int Create(CreateRestaurantDto dto)

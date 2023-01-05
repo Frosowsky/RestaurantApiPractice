@@ -17,8 +17,8 @@ namespace WebApplication3.Controllers
     public class RestaurantControllers : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
-        private readonly RestaurantDbContext _dbContext;
-        private readonly IMapper _mapper;
+        //private readonly RestaurantDbContext _dbContext;
+       // private readonly IMapper _mapper;
         public RestaurantControllers(IRestaurantService restaurantService)
         {
             _restaurantService = restaurantService;
@@ -44,11 +44,12 @@ namespace WebApplication3.Controllers
         }
         
         [HttpGet]
-        [Authorize(Policy = "Minimum2")]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        [AllowAnonymous]
+        
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery query)
         {   
 
-            var restaurantDtos = _restaurantService.GetAll();
+            var restaurantDtos = _restaurantService.GetAll(query);
             return Ok(restaurantDtos);
         }   
         [HttpPost]
