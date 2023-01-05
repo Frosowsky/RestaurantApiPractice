@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using WebApplication3.Authorization;
 using WebApplication3.Entitie;
@@ -51,6 +52,25 @@ namespace WebApplication3.Services
               .Include(r => r.Dishes)
               .Where(r => query.SearchPharse == null || r.Name.ToLower().Contains(query.SearchPharse.ToLower())
               || r.Name.ToLower().Contains(query.SearchPharse.ToLower()));
+
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            
+            {
+                var columnsSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>>
+                {
+                    {nameof(Restaurant.Name), r=> r.Name},
+                    {nameof(Restaurant.Description), r=> r.Description},
+                    {nameof(Restaurant.Category), r=> r.Category}
+                };
+
+                var selectedColumn = columnsSelectors[query.SortBy];
+
+               baseQuery = query.SortDirection == SortDirection.ASC? 
+                    baseQuery.OrderBy(selectedColumn) 
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
+
 
             var resturant = baseQuery
               .Skip(query.PageSize * (query.PageNumber -1))

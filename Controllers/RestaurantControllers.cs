@@ -17,8 +17,7 @@ namespace WebApplication3.Controllers
     public class RestaurantControllers : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
-        //private readonly RestaurantDbContext _dbContext;
-       // private readonly IMapper _mapper;
+    
         public RestaurantControllers(IRestaurantService restaurantService)
         {
             _restaurantService = restaurantService;
