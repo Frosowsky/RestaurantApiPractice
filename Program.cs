@@ -90,7 +90,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseCors("FrontendClient");
-
+app.UseStaticFiles();
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
 seeder.Seed();

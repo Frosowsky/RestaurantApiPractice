@@ -17,7 +17,7 @@ namespace WebApplication3.Models.Validators
                     context.AddFailure("PageSize", $"PageSize need be in {string.Join(",", allowedPageSizes)}");
                 }
             });
-            RuleFor(c => c.SortBy).Must(value => string.IsNullOrEmpty || allowedSortByColumnNames.Contains(value))
+            RuleFor(c => c.SortBy).Must(value => string.IsNullOrEmpty(value) || allowedSortByColumnNames.Contains(value))
                 .WithMessage($"Sort by is optional, or must be in{string.Join(",", allowedSortByColumnNames)}");
         }
     }
