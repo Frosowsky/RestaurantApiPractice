@@ -88,6 +88,8 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
+
+app.UseResponseCaching();
 app.UseStaticFiles();
 
 app.UseCors("FrontendClient");
